@@ -19,6 +19,7 @@ const userSchema = new Schema({
     minlength: 6,
     // maxlength: 20,
   },
+  blogs: [{ type: mongoose.Types.ObjectId, ref: "Blog", required: true }],
   //Type when it was posted
   //   createdAt: {
   //     type: Date,

@@ -40,6 +40,7 @@ export const signupUser = async (req, res, next) => {
     name,
     email,
     password: hashedPassword,
+    blogs: [],
   });
   //Now save the user to the MongoDB.
   try {

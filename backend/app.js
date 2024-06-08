@@ -1,13 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
 import router from "./routes/user-routes.js";
+import blogRouter from "./routes/blog-routes.js";
 
 //Get All the utlity from the Express
 const app = express();
+
 //Use middle ware to read the json data from the end point
 app.use(express.json());
-//Use of Router
+
+//Use of User Router
 app.use("/api/user", router);
+//Use of Blog Router
+app.use("/api/blog", blogRouter);
 
 //Connect to DataBase
 mongoose
