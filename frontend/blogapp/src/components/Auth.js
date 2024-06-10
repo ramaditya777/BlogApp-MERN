@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const dispath = useDispatch();
+  const dispatch = useDispatch(); // Corrected typo
   const [inputs, setInputs] = useState({
     name: "",
     email: "",
@@ -21,6 +21,7 @@ const Auth = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
   const sendRequest = async (type) => {
     const endpoint = type === "signup" ? "signup" : "login";
     try {
@@ -33,6 +34,7 @@ const Auth = () => {
         }
       );
       const data = res.data;
+      console.log(data);
       return data;
     } catch (err) {
       console.log(err);
@@ -45,16 +47,24 @@ const Auth = () => {
     console.log(inputs);
     if (isSignup) {
       sendRequest("signup")
-        .then(() => dispath(authActions.login()))
-        .then(() => navigate("/blogs"))
-        .then((data) => console.log(data));
+        .then((data) => localStorage.setItem("userId", data.user._id))
+        .then((data) => {
+          if (data) {
+            console.log(data);
+            dispatch(authActions.login());
+            navigate("/blogs");
+          }
+        })
+        .catch((err) => console.log(err));
     } else {
       sendRequest("login")
-        .then(() => dispath(authActions.login()))
+        .then((data) => localStorage.setItem("userId", data.user._id))
+        .then(() => dispatch(authActions.login()))
         .then(() => navigate("/blogs"))
-        .then((data) => console.log(data));
+        .catch((err) => console.log(err));
     }
   };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -81,7 +91,7 @@ const Auth = () => {
               placeholder="Name"
               margin="normal"
             />
-          )}{" "}
+          )}
           <TextField
             type="email"
             name="email"

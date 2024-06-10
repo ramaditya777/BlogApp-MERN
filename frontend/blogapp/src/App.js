@@ -6,11 +6,19 @@ import Blogs from "./components/Blogs";
 import UserBlogs from "./components/UserBlogs";
 import BlogDetails from "./components/BlogDetails";
 import AddBlog from "./components/AddBlog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { authActions } from "./store";
 
 function App() {
+  const disPatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   console.log(isLoggedIn);
+  useEffect(() => {
+    if (localStorage.getItem("userId")) {
+      disPatch(authActions.login());
+    }
+  }, [disPatch]);
   return (
     <>
       <header>
@@ -18,11 +26,16 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/myBlogs/add" element={<AddBlog />} />
-          <Route path="/myBlogs" element={<UserBlogs />} />
-          <Route path="/myBlogs/:id" element={<BlogDetails />} />
+          {!isLoggedIn ? (
+            <Route path="/auth" element={<Auth />} />
+          ) : (
+            <>
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/myBlogs/add" element={<AddBlog />} />
+              <Route path="/myBlogs" element={<UserBlogs />} />
+              <Route path="/myBlogs/:id" element={<BlogDetails />} />
+            </>
+          )}
         </Routes>
       </main>
     </>

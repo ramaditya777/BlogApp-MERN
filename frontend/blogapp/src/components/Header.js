@@ -13,10 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../store";
 
 const Header = () => {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
-  const [value, setValue] = useState();
+  // Initialize value to 0 or the default tab index you want
+  const [value, setValue] = useState(0);
+
   return (
     <AppBar position="sticky" sx={{ background: "rgb(58, 157, 180)" }}>
       <Toolbar>
@@ -30,6 +32,7 @@ const Header = () => {
             >
               <Tab LinkComponent={Link} to="/blogs" label="All Blogs" />
               <Tab LinkComponent={Link} to="/myBlogs" label="My Blogs" />
+              <Tab LinkComponent={Link} to="/myBlogs/add" label="ADD Blogs" />
             </Tabs>
           </Box>
         )}
@@ -59,7 +62,7 @@ const Header = () => {
           )}
           {isLoggedIn && (
             <Button
-              onClick={() => dispath(authActions.logout())}
+              onClick={() => dispatch(authActions.logout())}
               LinkComponent={Link}
               to="/auth"
               variant="contained"

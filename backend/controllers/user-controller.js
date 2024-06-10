@@ -56,21 +56,23 @@ export const loginUser = async (req, res, next) => {
   //Get the data from user  and destructure them
   const { email, password } = req.body;
   //Check the existing user
-  let existUSer;
+  let existUser;
   try {
-    existUSer = await User.findOne({ email });
+    existUser = await User.findOne({ email });
   } catch (error) {
     return console.log(error);
   }
   //if User Not Exist
-  if (!existUSer) {
+  if (!existUser) {
     return res.status(404).json({ message: "User Not Exist ! Go to SignUp." });
   }
   //Now get the original password and check with hashed password
-  const isPasswordCorrect = bcrypt.compareSync(password, existUSer.password);
+  const isPasswordCorrect = bcrypt.compareSync(password, existUser.password);
   //Chech password correct or not
   if (!isPasswordCorrect) {
     return res.status(400).json({ message: "Incorrect PAssword." });
   }
-  return res.status(200).json({ message: "Login Successfull." });
+  return res
+    .status(200)
+    .json({ message: "Login Successfull.", user: existUser });
 };
